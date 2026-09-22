@@ -64,13 +64,13 @@ def data_collector():
     collected_data["Processes"] = subprocess.check_output("ps", text = True)
     Cpu_name, core_num = linux_processor()
     collected_data["Cpu_name"] = Cpu_name
-    collected_data["Number of CPU cores"] = core_num
+    collected_data["Number_of_CPU_cores"] = core_num
     collected_data["Uptime"] = linux_uptime()
     Total_mem, Free_mem, Available_mem = linux_memory()
-    collected_data["Total memory"] = Total_mem
-    collected_data["Free memory"] = Free_mem
-    collected_data["Available memory"] = Available_mem
+    collected_data["Total_memory"] = Total_mem
+    collected_data["Free_memory"] = Free_mem
+    collected_data["Available_memory"] = Available_mem
     Net_name, vpn = get_network()
-    collected_data["Network name"] = Net_name
-    collected_data["VPN connections"] = vpn
+    collected_data["Network_name"] = Net_name
+    collected_data["VPN_connections"] = vpn
     return collected_data 

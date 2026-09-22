@@ -10,7 +10,7 @@ parametrs = {
     "Core_Version" : platform.version(),
     "Machine" : platform.machine(),
     "Processor" : platform.processor(),
-    "Network_name" : platform.node()
+    "Machine_name" : platform.node()
     }
 
 if parametrs["OS"] == "Windows":
