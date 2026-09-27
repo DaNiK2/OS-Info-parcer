@@ -1,5 +1,5 @@
 import os
-import subprocess
+#import subprocess
 
 VPN_TYPES = {
     "tun",          
@@ -46,17 +46,18 @@ def linux_memory():
                 Available_mem = l.split(":")[1].strip()
     return [Total_mem, Free_mem, Available_mem]
 
-def get_network():
-    data = subprocess.run(["nmcli", "-t", "connection", "show"], capture_output=True, text=True)
-    net_name=""
-    vpn = False
-    for l in data.stdout.splitlines():
-        collected_data = l.split(":")
-        if len(collected_data[-1]) != 0 and len(net_name) == 0:
-            net_name = collected_data[0]
-        if collected_data[-2] in VPN_TYPES:
-            vpn=True
-    return [net_name, vpn]
+#This code can break rules of project 😞
+# def get_network():
+#     data = subprocess.run(["nmcli", "-t", "connection", "show"], capture_output=True, text=True)
+#     net_name=""
+#     vpn = False
+#     for l in data.stdout.splitlines():
+#         collected_data = l.split(":")
+#         if len(collected_data[-1]) != 0 and len(net_name) == 0:
+#             net_name = collected_data[0]
+#         if collected_data[-2] in VPN_TYPES:
+#             vpn=True
+#     return [net_name, vpn]
             
 
 def data_collector():
@@ -70,7 +71,7 @@ def data_collector():
     collected_data["Total_memory"] = Total_mem
     collected_data["Free_memory"] = Free_mem
     collected_data["Available_memory"] = Available_mem
-    Net_name, vpn = get_network()
-    collected_data["Network_name"] = Net_name
-    collected_data["VPN_connections"] = vpn
+    # Net_name, vpn = get_network()
+    # collected_data["Network_name"] = Net_name
+    # collected_data["VPN_connections"] = vpn
     return collected_data 
