@@ -62,7 +62,7 @@ def linux_memory():
 
 def data_collector():
     collected_data = {}
-    collected_data["Processes"] = subprocess.check_output("ps", text = True)
+    #collected_data["Processes"] = subprocess.check_output("ps", text = True)
     Cpu_name, core_num = linux_processor()
     collected_data["Cpu_name"] = Cpu_name
     collected_data["Number_of_CPU_cores"] = core_num
