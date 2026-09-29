@@ -1,7 +1,7 @@
 import platform
 import json
 import subprocess
-import linux
+from linux import data_collector
 import getpass
 from win import get_win_inf
 
@@ -21,7 +21,7 @@ if parametrs["OS"] == "Windows":
 
 
 elif parametrs["OS"] == "Linux":
-    parametrs.update(linux.data_collector())
+    parametrs.update(data_collector())
 
 with open("output.json", "w", encoding="utf-8") as file:
     json.dump(parametrs, file, ensure_ascii=False, indent=5)
