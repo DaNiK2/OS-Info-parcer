@@ -58,11 +58,21 @@ def linux_memory():
 #         if collected_data[-2] in VPN_TYPES:
 #             vpn=True
 #     return [net_name, vpn]
+
+def get_vpn():
+    net = os.path.join("/", "proc", "net", "dev")
+    with open(net, "r", encoding="utf-8") as f:
+        for l in f:
+            tables = l.split(" ")
+            vpn = any(vpntype in tables[0] for vpntype in VPN_TYPES)
+            if vpn == True: return True
+    
             
+get_vpn()
 
 def data_collector():
     collected_data = {}
-    #collected_data["Processes"] = subprocess.check_output("ps", text = True)
+#collected_data["Processes"] = subprocess.check_output("ps", text = True)
     Cpu_name, core_num = linux_processor()
     collected_data["Cpu_name"] = Cpu_name
     collected_data["Number_of_CPU_cores"] = core_num
@@ -74,4 +84,5 @@ def data_collector():
     # Net_name, vpn = get_network()
     # collected_data["Network_name"] = Net_name
     # collected_data["VPN_connections"] = vpn
+    collected_data["VPN_connections"] = get_vpn()
     return collected_data 
