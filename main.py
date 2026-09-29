@@ -2,19 +2,23 @@ import platform
 import json
 import subprocess
 import linux
-
+import getpass
+from win import get_win_inf
 
 parametrs = {
-    "OS" : platform.system(),
-    "OS_Version" : platform.release(),
-    "Core_Version" : platform.version(),
-    "Machine" : platform.machine(),
-    "Processor" : platform.processor(),
-    "Network_name" : platform.node()
+        "OS": platform.system(),
+        "Platform": platform.platform(),
+        "Release": platform.release(),
+        "Core_Version": platform.version(),
+        "Processor": platform.processor(),
+        "Architecture": platform.architecture(),
+        "Username": getpass.getuser(),
+        "Network_name": platform.node(),
     }
 
 if parametrs["OS"] == "Windows":
-    parametrs["Processes"] = subprocess.check_output("tasklist", text = True)
+    parametrs.update(get_win_inf())
+
 
 elif parametrs["OS"] == "Linux":
     parametrs["Processes"] = subprocess.check_output("ps", text = True)
