@@ -1,38 +1,46 @@
-import platform
-import json
-import subprocess
-import linux
-import getpass
-from win import get_win_inf
+import datetime
+import socket
+import uuid
+import shutil
 
-parametrs = {
-        "OS": platform.system(),
-        "Platform": platform.platform(),
-        "Release": platform.release(),
-        "Core_Version": platform.version(),
-        "Processor": platform.processor(),
-        "Architecture": platform.architecture(),
-        "Username": getpass.getuser(),
-        "Network_name": platform.node(),
+
+def get_network_info():
+    try:
+        ip_local = socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        ip_local = "unknown"
+
+    return ip_local
+
+def get_mac_address():
+    mac_int = uuid.getnode()
+    mac_hex = ':'.join(['{:02x}'.format((mac_int >> i) & 0xff)
+                        for i in range(0, 48, 8)][::-1])
+    return mac_hex
+
+def get_disks_windows():
+    import string
+    disks = []
+    for letter in string.ascii_uppercase:
+        path = f"{letter}:\\"
+        try:
+            usage = shutil.disk_usage(path)
+            disks.append({
+                "letter": path,
+                "total_gb": round(usage.total / (1024 ** 3), 1),
+                "used_gb": round(usage.used / (1024 ** 3), 1),
+                "free_gb": round(usage.free / (1024 ** 3), 1)
+            })
+        except (FileNotFoundError, PermissionError, OSError):
+            continue
+    return disks
+
+def get_win_inf():
+    parametrs_win = {
+        "Disks": get_disks_windows(),
+        "MAC_address": get_mac_address(),
+        "Network_info": get_network_info(),
+        "Time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     }
-
-if parametrs["OS"] == "Windows":
-    parametrs.update(get_win_inf())
-
-
-elif parametrs["OS"] == "Linux":
-    parametrs["Processes"] = subprocess.check_output("ps", text = True)
-    Cpu_name, core_num = linux.linux_processor()
-    parametrs["Cpu_name"] = Cpu_name
-    parametrs["Number of CPU cores"] = core_num
-    parametrs["Uptime"] = linux.linux_uptime()
-    Total_mem, Free_mem, Available_mem = linux.linux_memory()
-    parametrs["Total memory"] = Total_mem
-    parametrs["Free memory"] = Free_mem
-    parametrs["Available memory"] = Available_mem
-
-
-
-
-with open("output.json", "w", encoding="utf-8") as file:
-    json.dump(parametrs, file, ensure_ascii=False, indent=5)
+    return parametrs_win
