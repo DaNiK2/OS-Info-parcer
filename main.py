@@ -23,8 +23,5 @@ if parametrs["OS"] == "Windows":
 elif parametrs["OS"] == "Linux":
     parametrs.update(linux.data_collector())
 
-
-
-
 with open("output.json", "w", encoding="utf-8") as file:
     json.dump(parametrs, file, ensure_ascii=False, indent=5)
